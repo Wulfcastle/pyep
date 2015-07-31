@@ -312,7 +312,7 @@ public class Question1 extends javax.swing.JFrame {
         } else {
             gender = "Male";
         }
-        String nameTag = "Athlete: " + surname + " " + initials + "\n" + gender; // Need to add string formatting
+        String nameTag = String.format("Athelete: %10s %10s \n %s:", surname, initials, gender);
         return nameTag;
     }
 
