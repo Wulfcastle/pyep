@@ -1,0 +1,33 @@
+JAVA ARRAY DECLARATION:
+=======================
+
+String[] arrTic = {"RCm158", "ADM33", "RCf250", "RAf5", "RRM32", "ADm236","RCm23", "RDM54", "RCf17", "RAm12", "ADm9", "RCF43", "RDm140", "RDm23", "ACF113", "ABf30", "RDm22", "ARf38", "RCF8", "RAf53", "RCf12", "ABF156", "ADM31", "ADM47", "RAf48", "ABF246", "ABf59", "RRM321", "ABm36", "RCF31","RAm445", "ACn26"};
+
+
+JAVA MENU PROGRAMMING CODE:
+==========================
+
+ BufferedReader kb = new BufferedReader(new InputStreamReader(System.in));
+               
+         char choice = ' ';
+         do {
+            System.out.println("    MENU");
+            System.out.println();
+            System.out.println("  Option A");
+            System.out.println("  Option B");
+			   System.out.println("  Option C");
+            System.out.println();
+            System.out.println("  Q - QUIT");
+            System.out.println("\n  Your choice?  ");
+            choice =kb.readLine().toUpperCase().charAt(0);
+            switch (choice) {
+               case 'A':                   
+                 			break;
+               case 'B':
+                        break;
+					case 'C':
+                        break;
+               case 'Q':
+                        System.out.println("Quit");
+            }
+         } while (choice != 'Q');
