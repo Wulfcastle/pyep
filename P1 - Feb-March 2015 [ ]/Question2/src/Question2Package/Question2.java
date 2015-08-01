@@ -1,12 +1,17 @@
-
 package Question2Package;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.util.Scanner;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
 public class Question2 extends javax.swing.JFrame {
+    
+    
+    HomeLoan homeLoan = null;
 
     public Question2() {
         initComponents();
@@ -223,11 +228,49 @@ public class Question2 extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCloseActionPerformed
 
     private void btnLocateApplicantActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLocateApplicantActionPerformed
-       //Question 2.2.1
+        String applicantName = cmbApplicants.getSelectedItem().toString();
+        if ("".equals(applicantName)) {
+            JOptionPane.showMessageDialog(null, "You haven't selected an applicant.");
+        } else {
+            String fileName = applicantName + ".txt";
+            String contents = "";
+            try {
+                Scanner textFileScanner = new Scanner(new File(fileName)).useDelimiter(",\\s*");
+                while (textFileScanner.hasNext() == true) {
+                    contents = textFileScanner.next();
+                }
+                String[] details = contents.split("\r\n");
+                double monthlyIncome = Double.parseDouble(details[1]);
+                double monthlyExpenditure = Double.parseDouble(details[2]);
+                double homeLoanAmount = Double.parseDouble(details[3]);
+                double disposableIncome = monthlyIncome - monthlyExpenditure;
+                
+                homeLoan = new HomeLoan(applicantName, disposableIncome, homeLoanAmount);
+                btnEvaluate.setEnabled(true); 
+                
+            } catch (FileNotFoundException ex) {
+                JOptionPane.showMessageDialog(null, String.format("No home loan application was submitted by %s", applicantName));
+                btnEvaluate.setEnabled(false);
+            }
+        }
     }//GEN-LAST:event_btnLocateApplicantActionPerformed
 
     private void btnEvaluateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEvaluateActionPerformed
-       //Question 2.2.2
+        int years = Integer.parseInt(cmbYears.getSelectedItem().toString());
+        double interestRate = Double.parseDouble(txfInterest.getText());
+        homeLoan.setYears(years);
+        homeLoan.setInterest(interestRate);
+        String approval = "";
+        if (homeLoan.isAppproved() == true) {
+            approval = "APPROVED";
+            txaOutput.setText(String.format("%s\n"
+                + "Loan %s wth a monthly instalment of R%.2f", homeLoan.toString(), approval, homeLoan.calculateInstalmentAmount()));
+        } else {
+            approval = "NOT APPROVED";
+            txaOutput.setText(String.format("Name of applicant: %s\n"
+                    + "Loan %s", homeLoan.getName(), approval));
+        }
+        
 
     }//GEN-LAST:event_btnEvaluateActionPerformed
 
@@ -235,7 +278,6 @@ public class Question2 extends javax.swing.JFrame {
         btnEvaluate.setEnabled(false);
         txaOutput.setText("");
     }//GEN-LAST:event_cmbApplicantsActionPerformed
-
 
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
