@@ -4,14 +4,20 @@ package Question1Package;
 import java.text.DecimalFormat;
 import javax.swing.JOptionPane;
 
-
 public class Question1 extends javax.swing.JFrame {
 
-
     DecimalFormat df = new DecimalFormat("R 0.00");
-       
+
+    String[] arrGeysers = {"50-QuickSun50", "100-QuickSun100", "150-QuickSun150", "50-Solar Magic", "50-InHotWater",
+        "100-SunnyBath 100", "150-SunnyBath 150", "50-WaterJoy 50", "100-WaterJoy 100",
+        "150-BigTub 150", "50-Small Wonder", "100-Medium Wonder", "150-Large Wonder",
+        "100-SolarWarmth 100", "150-SolarWarmth 150", "50-Sun Magic", "50-Eco Wonder 50",
+        "100-Eco Wonder 100", "150-Eco Wonder 150", "150-Big Earth Saver"};
+
+    String type = "";
+
     public Question1() {
-       
+
         initComponents();
         this.setLocationRelativeTo(this);
     }
@@ -74,6 +80,11 @@ public class Question1 extends javax.swing.JFrame {
 
         txfMarket.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         txfMarket.setText("0");
+        txfMarket.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txfMarketActionPerformed(evt);
+            }
+        });
 
         lblNumBathrooms.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblNumBathrooms.setText("Number of bathrooms:");
@@ -528,28 +539,87 @@ public class Question1 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSalesAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSalesAddActionPerformed
-        //Question 1.1
+        Double marketValue = Double.parseDouble(txfMarket.getText());
+        Double sellingPrice = Double.parseDouble(txfSellingPrice.getText());
+        int bedrooms = Integer.parseInt(txfBeds.getText());
+        int bathrooms = Integer.parseInt(txfBaths.getText());
+        boolean bargain = false;
+        boolean pool = false;
+        if (chkPool.isSelected()) {
+            pool = true;
+        }
+        if (sellingPrice < marketValue) {
+            bargain = true;
+        }
+        txaOutput.setText(compileAdvertisement(sellingPrice, marketValue, bedrooms, bathrooms, pool, bargain));
 
     }//GEN-LAST:event_btnSalesAddActionPerformed
 
     private void rbtPaintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtPaintActionPerformed
-        //Question 1.2.1
+        if (rbtPaint.isSelected()) {
+            type = "Painting";
+        }
     }//GEN-LAST:event_rbtPaintActionPerformed
 
     private void rbtTileActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbtTileActionPerformed
-        //Question 1.2.2
+        if (rbtTile.isSelected()) {
+            type = "Tiling";
+        }
     }//GEN-LAST:event_rbtTileActionPerformed
 
     private void btnCalcRenovationActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcRenovationActionPerformed
-        //Question 1.2.3
+        txaOutputRenovation.setText(calculateCost(type, Double.parseDouble(txfArea.getText())));
     }//GEN-LAST:event_btnCalcRenovationActionPerformed
 
     private void btnCalcAmountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCalcAmountActionPerformed
-        //Question 1.3.1
+        int previousReading = Integer.parseInt(txfPrev.getText());
+        int currentReading = Integer.parseInt(txfCurrent.getText());
+        double amountDue = 0.00;
+        double units = 0.00;
+        double tariffs = 0.00;
+        if (currentReading < previousReading) {
+            JOptionPane.showMessageDialog(null, "Your current reading is less than previous reading.");
+        } else {
+            units = currentReading - previousReading;
+            if (units > 600) {
+                tariffs = 1.50;
+                amountDue = 600.00 + ((units - 600) * tariffs);
+            } else {
+                tariffs = 1.00;
+                amountDue = units * tariffs;
+            }
+            txfCurrent.setText(currentReading + "");
+            lblElectricity.setText(String.format("R%.2f", amountDue));
+        }
+
     }//GEN-LAST:event_btnCalcAmountActionPerformed
 
     private void btnFindGeysersActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnFindGeysersActionPerformed
-        //Question 1.3.2
+        int geyserCapacity = 0;
+        try {
+            geyserCapacity = Integer.parseInt(txfGeyserSize.getText());
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        int suitableGeyser = 0;
+        if (geyserCapacity <= 50) {
+            suitableGeyser = 50;
+        } else if (geyserCapacity > 50 && geyserCapacity <= 100) {
+            suitableGeyser = 100;
+        } else if (geyserCapacity > 100 && geyserCapacity <= 150) {
+            suitableGeyser = 150;
+        } else {
+            JOptionPane.showMessageDialog(null, "No suitable geysers were found.");
+        }
+        for (String geyser : arrGeysers) {
+            String[] details = geyser.split("-");
+            String capacity = details[0];
+            String geyserName = details[1];
+            if (!capacity.equals(suitableGeyser + "")) {
+            } else {
+                txaOutputGeysers.append(String.format("%s\n", geyserName));
+            }
+        }
     }//GEN-LAST:event_btnFindGeysersActionPerformed
 
     private void btnCloseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCloseActionPerformed
@@ -560,7 +630,59 @@ public class Question1 extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txfAreaActionPerformed
 
-    
+    private void txfMarketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txfMarketActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txfMarketActionPerformed
+
+    public String calculateCost(String type, double area) {
+        String output = "";
+        switch (type) {
+            case "Painting":
+                double volumeRequired = area / 8.00;
+                double paintNeeded = Math.round(volumeRequired); // Rounding UP volume required.
+                int oneLitreDrums = 0;
+                int twoLitreDrums = 0;
+                int fiveLitreDrums = 0;
+
+                fiveLitreDrums = (int) (paintNeeded / 5);
+                paintNeeded -= 5 * fiveLitreDrums;
+                twoLitreDrums = ((int) paintNeeded / 2);
+                paintNeeded -= twoLitreDrums * 2;
+
+                while (paintNeeded > 0) {
+                    oneLitreDrums++;
+                    paintNeeded -= 1;
+                }
+
+                double cost = (fiveLitreDrums * 199.90) + (twoLitreDrums * 92.30) + (oneLitreDrums * 55.50);
+
+                output = String.format("Area: %.2f square metres\nVolume of paint required: %.2f litres\n\n"
+                        + "1-litre Drums : %d\n2-litre Drums: %d\n5-litre Drums: %d\nTotal Cost: R%.2f", area, volumeRequired, oneLitreDrums, twoLitreDrums, fiveLitreDrums, cost);
+                break;
+
+            case "Tiling":
+                double costPerSquareMeter = Double.parseDouble(JOptionPane.showInputDialog(null, "Enter cost per square metre."));
+                double tilingCost = (area + 5) * costPerSquareMeter;
+
+                output = String.format("Area: %.2f square metres\nTotal Cost: R%.2f", area, tilingCost);
+                break;
+        }
+
+        return output;
+    }
+
+    public String compileAdvertisement(double sellPrice, double marketValue, int bedrooms, int bathrooms, boolean pool, boolean bargain) {
+        String output = "";
+        DecimalFormat df = new DecimalFormat("R 0.00");
+        output = String.format("House for sale: \nR%.2f#%dBed#%dBath", sellPrice, bedrooms, bathrooms);
+        if (pool == true) {
+            output = output + String.format("%s", "Pool#");
+        }
+        if (bargain == true) {
+            output = output + String.format("%s", "Bargain");
+        }
+        return output;
+    }
 
     /**
      * @param args the command line arguments
@@ -645,11 +767,5 @@ public class Question1 extends javax.swing.JFrame {
     private javax.swing.JTextField txfPrev;
     private javax.swing.JTextField txfSellingPrice;
     // End of variables declaration//GEN-END:variables
-
-String  []arrGeysers  = {"50-QuickSun50","100-QuickSun100","150-QuickSun150","50-Solar Magic","50-InHotWater",
-                                          "100-SunnyBath 100","150-SunnyBath 150","50-WaterJoy 50","100-WaterJoy 100",
-                                          "150-BigTub 150","50-Small Wonder","100-Medium Wonder","150-Large Wonder",
-                                          "100-SolarWarmth 100","150-SolarWarmth 150","50-Sun Magic","50-Eco Wonder 50",
-                                          "100-Eco Wonder 100","150-Eco Wonder 150","150-Big Earth Saver"};
 
 }
