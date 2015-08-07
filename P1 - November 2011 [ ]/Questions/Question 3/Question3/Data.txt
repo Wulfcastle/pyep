@@ -1,0 +1,15 @@
+Complaint:P8120876:03/03/2011#Unresolved water issues after five visits to municipality
+Suggestion:F543199:10/04/2011#Water should be supplied every hour if normal water supply is suspended
+Account:F999765:30/04/2011#Statement of account for April has not been supplied
+Complaint:H654321:04/05/2011#Rate of billing is inconsistent from month to month
+Account:T564321:14/06/2011#Paid an extra R150 for May 2011, balance has not been carried over for June
+Suggestion:J345556:21/06/2011#E-mail statements instead of posting to account holders
+Complaint:K567543:03/07/2011#Overflow of water for June 2011, awaiting payment from water insurance
+Account:G654321:01/08/2011#Statement not received for July 2011 
+Complaint:B654321:10/08/2011#Water shortages occur too often in Peacevale
+Complaint:K567543:15/08/2011#Still awaiting payment from water insurance
+Account:Y6754332:29/08/2011#Overcharged for August 2011, statement does not match usage
+Account:K567543:01/09/2011#A second payment for August 2011 is not reflected on September statement
+Account:K765434:23/09/2011#August payment not reflected on account for September 2011
+Complaint:K567543:01/10/2011#Incorrect reading for September 2011 - premises were locked the entire month
+Suggestion:H876543:05/10/2011#Review new tariffs for 2012 before implementation
