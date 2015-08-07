@@ -1,18 +1,18 @@
-
 package Question3Package;
 
+import javax.swing.JOptionPane;
+
 public class Question3 extends javax.swing.JFrame {
-    
+
     // Given code
     PopulateArrays objAssign = new PopulateArrays();
-    String [] arrSales = objAssign.populateArrSales();
-    String [] arrAgents = objAssign.populateArrAgents();
+    String[] arrSales = objAssign.populateArrSales();
+    String[] arrAgents = objAssign.populateArrAgents();
 
-
-    
     public Question3() {
         initComponents();
         setLocationRelativeTo(this);
+        btnAgentsSalesRecord.setEnabled(false);
     }
 
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -28,6 +28,8 @@ public class Question3 extends javax.swing.JFrame {
         txfAgentCode = new javax.swing.JTextField();
         btnAgentsSalesRecord = new javax.swing.JButton();
         pnlDisplay = new javax.swing.JPanel();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        txaOutput = new javax.swing.JTextArea();
 
         jTextArea1.setColumns(20);
         jTextArea1.setRows(5);
@@ -104,15 +106,25 @@ public class Question3 extends javax.swing.JFrame {
 
         pnlDisplay.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(102, 102, 102), 1, true), "Display area", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 12))); // NOI18N
 
+        txaOutput.setColumns(20);
+        txaOutput.setRows(5);
+        jScrollPane2.setViewportView(txaOutput);
+
         javax.swing.GroupLayout pnlDisplayLayout = new javax.swing.GroupLayout(pnlDisplay);
         pnlDisplay.setLayout(pnlDisplayLayout);
         pnlDisplayLayout.setHorizontalGroup(
             pnlDisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 551, Short.MAX_VALUE)
+            .addGroup(pnlDisplayLayout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 659, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         pnlDisplayLayout.setVerticalGroup(
             pnlDisplayLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 192, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, pnlDisplayLayout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout pnlContentLayout = new javax.swing.GroupLayout(pnlContent);
@@ -154,12 +166,120 @@ public class Question3 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnAgentsNameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgentsNameActionPerformed
-          //Question 3.1
+        String agentCode = txfAgentCode.getText();
+        String result = this.findAgent(agentCode);
+        if (result.equals("")) {
+            // Agent was not found
+            JOptionPane.showMessageDialog(null, "Agent was not found.");
+        } else {
+            lblAgentName.setText(result);
+            btnAgentsSalesRecord.setEnabled(true);
+        }
+
     }//GEN-LAST:event_btnAgentsNameActionPerformed
 
     private void btnAgentsSalesRecordActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnAgentsSalesRecordActionPerformed
-          //Question 3.2
+        txaOutput.setText(findAgentDetails(txfAgentCode.getText()));
     }//GEN-LAST:event_btnAgentsSalesRecordActionPerformed
+
+    public String findAgentDetails(String agentCode) {
+        String output = "";
+        if (!"".equals(this.findAgent(agentCode))) {
+            // Agent exists
+
+            int[][] agentSales = new int[3][12];
+
+            for (int[] arrTypeOfSale : agentSales) { //arrTypeOfSale is a row in the two-dimensional array
+                for (int sale : arrTypeOfSale) {
+                    sale = 0; // Initializing all sales amounts to zero.
+                }
+            }
+            // Rows represent the type of sales (e.g. Commercial, Residential, Agricultural).
+            // Columns represent the month of the sale (e.g. January, February, March).
+
+            double totalSales = 0.0;
+
+            for (String sale : arrSales) {
+                if (sale.contains(String.format("#%s;", agentCode))) {
+                    String[] details = sale.split("#");
+                    String month = details[0];
+                    String type = details[1];
+                    String salesInfo = details[2];
+                    String[] salesInfoDetails = salesInfo.split(";");
+                    String amount = salesInfoDetails[1];
+
+                    totalSales += Double.parseDouble(amount);
+
+                    int column = Integer.parseInt(month) - 1;
+                    int row = 0;
+
+                    switch (type) {
+                        case "C": // Commercial
+                            row = 0;
+                            break;
+                        case "R": // Residential
+                            row = 1;
+                            break;
+                        case "A": // Agricultural
+                            row = 2;
+                            break;
+                    }
+                    agentSales[row][column]++;
+                }
+            }
+
+            String columns = String.format("%35s%10s%10s%10s%10s%10s%10s%10s%10s%10s%10s%10s\n",
+                    "Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec");
+
+            String salesOutput = "\n\n";
+            int row = 0;
+            for (int[] typeOfSale : agentSales) {
+                double numberOfSalesInType = 0;
+                switch (row) {
+                    case 0:
+                        salesOutput += "Commercial";
+                        break;
+                    case 1:
+                        salesOutput += "Residential";
+                        break;
+                    case 2:
+                        salesOutput += "Agricultural";
+                        break;
+                }
+                for (int sale : typeOfSale) {
+                    salesOutput += String.format("%12d", sale);
+                    numberOfSalesInType += sale;
+
+                }
+                salesOutput += String.format("%20.0f", numberOfSalesInType);
+                salesOutput += "\n\n";
+                row++;
+            }
+            output = columns + salesOutput + String.format("\nTotal value of sales: R %.2f", totalSales);
+
+        } else {
+
+            // Agent doesn't exist
+            JOptionPane.showMessageDialog(null, "Agent doesn't exist.");
+        }
+        return output;
+    }
+
+    public String findAgent(String agentCode) {
+        String output = "";
+
+        for (String agent : arrAgents) {
+            String[] details = agent.split(":");
+            String agentNumber = details[0];
+            String agentName = details[1];
+            if (agentNumber.equals(agentCode)) {
+                output = agentName;
+                break;
+            }
+        }
+
+        return output;
+    }
 
     public static void main(String args[]) {
         java.awt.EventQueue.invokeLater(new Runnable() {
@@ -172,13 +292,15 @@ public class Question3 extends javax.swing.JFrame {
     private javax.swing.JButton btnAgentsName;
     private javax.swing.JButton btnAgentsSalesRecord;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextArea jTextArea1;
     private javax.swing.JLabel lblAgentCode;
     private javax.swing.JLabel lblAgentName;
     private javax.swing.JPanel pnlContent;
     private javax.swing.JPanel pnlDisplay;
     private javax.swing.JPanel pnlSalesDetail;
+    private javax.swing.JTextArea txaOutput;
     private javax.swing.JTextField txfAgentCode;
     // End of variables declaration//GEN-END:variables
-    
+
 }
