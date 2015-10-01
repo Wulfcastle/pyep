@@ -4,20 +4,17 @@
  */
 package Queston2Package;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.text.ParseException;
 import javax.swing.JButton;
+import javax.swing.JOptionPane;
 
-/**
- *
- * @author Administrator
- */
 public class Question2 extends javax.swing.JFrame {
 
-    /**
-     * Creates new form Question2
-     */
-    
-    
-    public Question2() {       
+    RelayEvent rlEvent;
+
+    public Question2() {
         initComponents();
         this.setLocationRelativeTo(this);
         this.setVisible(true);
@@ -248,23 +245,50 @@ public class Question2 extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnQ2_1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQ2_1ActionPerformed
-        //Question 2.1
-        
+        String event = "Boys U/19 4x100m Relay";
+        String team = "Bristol House";
+        String year = "2009";
+        double time = 41.13;
+        rlEvent = new RelayEvent(event, team, year, time);
+        txaQ2.setText(rlEvent.toString());
     }//GEN-LAST:event_btnQ2_1ActionPerformed
 
     private void btnQ2_2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQ2_2ActionPerformed
-       //Question 2.2
-             
+        final String team = txfTeam.getText();
+        try {
+            final double time = Double.parseDouble(txfTime.getText());
+            JButton btnTestRecord = new JButton();
+            btnTestRecord.setText("Test Record");
+            pnlQ2_2.add(btnTestRecord);
+            btnTestRecord.setBounds(35, 235, 205, 55);
+            pnlQ2_2.validate();
+            btnTestRecord.addActionListener(new ActionListener() {
 
+                public void actionPerformed(ActionEvent e) {
+                    rlEvent.checkForRecord(team, time);
+                    txaQ2.setText(rlEvent.toString());
+                }
+            });
+        } catch (NumberFormatException ex) {
+            JOptionPane.showMessageDialog(null, "Please enter a valid time.");
+        }
     }//GEN-LAST:event_btnQ2_2ActionPerformed
 
     private void btnQ2_3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnQ2_3ActionPerformed
-       // Question 2.3
-        
+        String eventYears = rlEvent.getYear();
+        String[] years = eventYears.split("; ");
+        boolean newRecord = false;
+        for (String year : years) {
+            if (year.equals("2015") || year.equals("2014") || year.equals("2013")) {
+                newRecord = true;
+            }
+        }
+        if (newRecord == true) {
+            txaQ2.append("\n\nNew Record");
+        } else {
+            txaQ2.append("\n\nOld Record");
+        }
     }//GEN-LAST:event_btnQ2_3ActionPerformed
-
-      
-
 
     /**
      * @param args the command line arguments
