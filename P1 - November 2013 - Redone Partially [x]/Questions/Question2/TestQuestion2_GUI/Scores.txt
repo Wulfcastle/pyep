@@ -1,0 +1,3 @@
+Shimal,Harichurn,30
+Sarah,John,72
+Bob,Jack,0
