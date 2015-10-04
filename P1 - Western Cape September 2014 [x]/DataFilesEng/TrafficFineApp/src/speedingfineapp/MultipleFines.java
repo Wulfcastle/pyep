@@ -7,6 +7,7 @@ package speedingfineapp;
 import java.awt.Color;
 import java.text.ParseException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Random;
 import javax.swing.JLabel;
 
@@ -428,7 +429,7 @@ public class MultipleFines extends javax.swing.JFrame {
         }
         return arrOffenders;
     }
-
+    
     public static void main(String args[]) {
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
