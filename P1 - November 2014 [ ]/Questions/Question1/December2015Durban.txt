@@ -1,0 +1,6 @@
+2014-12-01 Durban to Cape Town
+2014-12-04 Port Elizabeth to Durban
+2014-12-05 Durban to Kimberley
+2014-12-05 Durban to Potchefstroom
+2014-12-07 Potchefstroom to Durban
+2014-12-09 Durban to Bloemfontein
